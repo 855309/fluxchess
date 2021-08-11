@@ -20,7 +20,11 @@ You can use [*qmake*](https://doc.qt.io/qt-5/qmake-manual.html) to build this pr
 
 ```sh
 cd fluxchess
-qmake && make
+
+mkdir build && cd build
+cp -r ../res .
+
+qmake .. && make
 ```
 
 ## Status
