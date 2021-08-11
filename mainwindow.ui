@@ -40,7 +40,7 @@
      <x>0</x>
      <y>0</y>
      <width>532</width>
-     <height>22</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuMain">
@@ -56,6 +56,7 @@
      <string>Edit</string>
     </property>
     <addaction name="actionChange_Minimax_Depth"/>
+    <addaction name="actionToggle_Analyze_Mode"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -89,6 +90,11 @@
   <action name="actionGitHub">
    <property name="text">
     <string>GitHub</string>
+   </property>
+  </action>
+  <action name="actionToggle_Analyze_Mode">
+   <property name="text">
+    <string>Toggle Analyze Mode</string>
    </property>
   </action>
  </widget>

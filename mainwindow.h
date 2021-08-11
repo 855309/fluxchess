@@ -17,6 +17,7 @@ class MainWindow : public QMainWindow
 
 public:
     MainWindow(QWidget *parent = nullptr);
+    void highlightBlock(string pos);
     void boardBlock_clicked();
     void movePiece(string pos, string dest);
     bool canMove(string pos, string dest);
@@ -26,6 +27,8 @@ public:
     void exitGame();
     void makeAIMove();
     void changeMMDepth();
+    void delay(int millisecondsToWait);
+    void toggleAnalyze();
     ~MainWindow();
 
 private:

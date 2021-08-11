@@ -19,11 +19,12 @@ string chsalphabet = "abcdefgh";
 
 bool canDep = true;
 bool haveMove = false;
+bool analyzeMode = false;
 string moveDep;
 
 BoardData setupData;
 
-int minimaxdepth = 5;
+int minimaxdepth = 3;
 
 Piece MainWindow::getPieceFromPos(string pos){
     for(boardPair& bpair : setupData.data){
@@ -35,12 +36,12 @@ Piece MainWindow::getPieceFromPos(string pos){
     }
 }
 
-void delay( int millisecondsToWait )
+void MainWindow::delay(int millisecondsToWait)
 {
-    QTime dieTime = QTime::currentTime().addMSecs( millisecondsToWait );
-    while( QTime::currentTime() < dieTime )
+    QTime dieTime = QTime::currentTime().addMSecs(millisecondsToWait);
+    while(QTime::currentTime() < dieTime)
     {
-        QCoreApplication::processEvents( QEventLoop::AllEvents, 100 );
+        QCoreApplication::processEvents(QEventLoop::AllEvents, 100);
     }
 }
 
@@ -76,7 +77,9 @@ bool MainWindow::canMove(string pos, string dest){
 
 void MainWindow::changeMMDepth(){
     bool ok;
-    int i = QInputDialog::getInt(this, tr("Change Minimax Depth"), tr("Enter depth (default: 5):"), minimaxdepth, 0, 100, 1, &ok);
+
+    string nm = "Enter depth (default: " + to_string(minimaxdepth) + "):";
+    int i = QInputDialog::getInt(this, tr("Change Minimax Depth"), tr(nm.c_str()), minimaxdepth, 0, 100, 1, &ok);
 
     if(ok){
         minimaxdepth = i;
@@ -168,11 +171,17 @@ vector<string> MainWindow::ignoreWhitePos(vector<string> positions){
 }
 
 void MainWindow::makeAIMove(){
-    ai60221 ai(setupData);
+    ai60221 ai(setupData, this);
+    ai.analyzeMode = analyzeMode;
 
     Move mv = ai.genMove(minimaxdepth);
 
     movePiece(mv.pos, mv.dest);
+}
+
+void MainWindow::highlightBlock(string pos){
+    QPushButton *btnxf = this->findChild<QPushButton*>(pos.c_str());
+    btnxf->setStyleSheet("background-color: rgb(255, 135, 227)");
 }
 
 void MainWindow::boardBlock_clicked(){
@@ -240,6 +249,10 @@ void MainWindow::exitGame(){
     exit(0);
 }
 
+void MainWindow::toggleAnalyze(){
+    analyzeMode = !analyzeMode;
+}
+
 MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWindow)
 {
     ui->setupUi(this); // main setup utility
@@ -247,6 +260,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
     // connect toolbar buttons
     connect(ui->actionQuit, &QAction::triggered, this, &MainWindow::exitGame); // quit
     connect(ui->actionChange_Minimax_Depth, &QAction::triggered, this, &MainWindow::changeMMDepth); // change minimax depth
+    connect(ui->actionToggle_Analyze_Mode, &QAction::triggered, this, &MainWindow::toggleAnalyze); // toggle analyzeMode
 
     setupData.makeSetupData();
 

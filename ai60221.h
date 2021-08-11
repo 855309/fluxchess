@@ -4,12 +4,14 @@
 #include "move.h"
 #include "boarddata.h"
 #include "piece.h"
+#include "mainwindow.h"
 
 #include <QObject>
 
 class ai60221
 {
 public:
+    ai60221(BoardData bdata, MainWindow* mainwindow);
     ai60221(BoardData bdata);
     BoardData data;
     Move genMove(int depth);
@@ -21,6 +23,10 @@ public:
     bool hasPieceDATA(string spos, BoardData bdata);
     int minimax(Move posmove, BoardData bdata, int depth);
     vector<string> ignoreWhitePos(vector<string> positions);
+
+    MainWindow *mainwin;
+    bool hasMainw = false;
+    bool analyzeMode = false;
 };
 
 #endif // AI60221_H

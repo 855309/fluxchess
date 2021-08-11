@@ -25,6 +25,3 @@ qmake && make
 
 ## Status
 Currently **in development**.
-
-## Assets & Images
-From [Wikimedia Commons](https://commons.wikimedia.org/wiki/Category:SVG_chess_pieces).

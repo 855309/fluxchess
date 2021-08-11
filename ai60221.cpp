@@ -9,10 +9,21 @@
 #include <QFuture>
 #include <QThread>
 #include <QtConcurrent/QtConcurrent>
+#include <QMainWindow>
+
+ai60221::ai60221(BoardData bdata, MainWindow *mainwindow)
+{
+    this->data = bdata;
+
+    this->mainwin = mainwindow;
+    this->hasMainw = true;
+}
 
 ai60221::ai60221(BoardData bdata)
 {
     this->data = bdata;
+
+    this->hasMainw = false;
 }
 
 bool ai60221::hasPiece(string spos){
@@ -168,6 +179,8 @@ vector<boardPair> emulateMove(Move move, BoardData mdata){
     return tmpdata.data;
 }
 
+int delayMS = 7;
+
 int ai60221::minimax(Move posmove, BoardData bdata, int depth){
     if(depth == 0){
         return 0;
@@ -183,6 +196,13 @@ int ai60221::minimax(Move posmove, BoardData bdata, int depth){
         }
     }
 
+    vector<boardPair> blackPieceXPos;
+    for(boardPair epair : emul){
+        if(epair.piecetype.back() == 'B'){
+            blackPieceXPos.push_back(epair);
+        }
+    }
+
     int cval = 0;
     for(boardPair wbpair : whitePieceXPos){
         for(string wbposA : wbpair.positions){
@@ -190,12 +210,49 @@ int ai60221::minimax(Move posmove, BoardData bdata, int depth){
             s.pos = wbposA;
             s.type = wbpair.piecetype;
 
+            if(this->analyzeMode && this->hasMainw){
+                mainwin->delay(delayMS);
+                mainwin->clearBoardColors();
+                mainwin->highlightBlock(wbposA);
+            }
+
             for(string plWpos : ignoreWhitePos(s.getPlayablePositions(BoardData(emul)))){
                 if(hasPieceDATA(plWpos, BoardData(emul))){
+                    if(this->analyzeMode && this->hasMainw){
+                        mainwin->highlightBlock(plWpos);
+                    }
+
                     int absval = getAbsoluteValue(getPieceFromPosDATA(plWpos, BoardData(emul)).type);
                     cval += absval + minimax(Move(wbposA, plWpos), BoardData(emul), depth - 1);
 
-                    cout << "[CALC] [MINIMAX] Calculating absolute value: " << absval << " : " << cval << endl;
+                    cout << "[CALC] [MINIMAX] Calculating negative absolute value: " << absval << " : " << cval << endl;
+                }
+            }
+        }
+    }
+
+    for(boardPair bbpair : blackPieceXPos){
+        for(string bbposA : bbpair.positions){
+            Piece s;
+            s.pos = bbposA;
+            s.type = bbpair.piecetype;
+
+            if(this->analyzeMode && this->hasMainw){
+                mainwin->delay(delayMS);
+                mainwin->clearBoardColors();
+                mainwin->highlightBlock(bbposA);
+            }
+
+            for(string plBpos : ignoreBlackPos(s.getPlayablePositions(BoardData(emul)))){
+                if(hasPieceDATA(plBpos, BoardData(emul))){
+                    if(this->analyzeMode && this->hasMainw){
+                        mainwin->highlightBlock(plBpos);
+                    }
+
+                    int absval = getAbsoluteValue(getPieceFromPosDATA(plBpos, BoardData(emul)).type);
+                    cval += absval + minimax(Move(bbposA, plBpos), BoardData(emul), depth - 1);
+
+                    cout << "[CALC] [MINIMAX] Calculating positive absolute value: " << absval << " : " << cval << endl;
                 }
             }
         }
@@ -205,6 +262,8 @@ int ai60221::minimax(Move posmove, BoardData bdata, int depth){
 }
 
 Move ai60221::genMove(int depth){
+    mainwin->highlightBlock("a1");
+
     vector<Move> possibleMoves;
 
     for(boardPair pair : this->data.data){
