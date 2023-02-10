@@ -21,7 +21,7 @@ public:
     Piece getPieceFromPosDATA(string pos, BoardData bdata);
     int getAbsoluteValue(string type);
     bool hasPieceDATA(string spos, BoardData bdata);
-    int minimax(Move posmove, BoardData bdata, int depth);
+    int minimax(BoardData bdata, int depth, int alpha, int beta, bool maxp);
     vector<string> ignoreWhitePos(vector<string> positions);
 
     MainWindow *mainwin;

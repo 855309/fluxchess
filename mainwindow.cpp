@@ -24,7 +24,14 @@ string moveDep;
 
 BoardData setupData;
 
-int minimaxdepth = 3;
+int minimaxdepth = 2;
+
+string MainWindow::get_current_dir() {
+   char buff[FILENAME_MAX]; //create string buffer to hold path
+   GetCurrentDir( buff, FILENAME_MAX );
+   string current_working_dir(buff);
+   return current_working_dir;
+}
 
 Piece MainWindow::getPieceFromPos(string pos){
     for(boardPair& bpair : setupData.data){
@@ -319,7 +326,7 @@ MainWindow::MainWindow(QWidget *parent) : QMainWindow(parent), ui(new Ui::MainWi
 
                         boardBlock->setIcon(QIcon(QPixmap(imgpath.c_str())));
 
-                        // cout << "Image placed: " << pos << " - " << pair.piecetype << endl;
+                        // cout << "Image placed: " << pos << " - " << imgpath << endl;
 
                         break;
                     }

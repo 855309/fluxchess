@@ -41,9 +41,10 @@ int main(int argc, char *argv[])
         << "::::::::::::::::::::::::::::::::::::::::::::::::::::::::" << endl << endl;
 
     cout << "fluxchess" << endl << "---------" << endl;
-    cout << "author: fikret0 (a.k.a 85530)" << endl;
+    cout << "author: 85530 (github: @855309)" << endl;
     cout << "license: MIT License" << endl;
-    cout << "6 August 2021" << endl;
+    cout << "Initial commit: 6 August 2021" << endl;
+    cout << "Fix: 10 February 2023" << endl;
 
     QApplication a(argc, argv);
     MainWindow w;

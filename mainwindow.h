@@ -1,6 +1,14 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#ifdef WINDOWS
+#include <direct.h>
+#define GetCurrentDir _getcwd
+#else
+#include <unistd.h>
+#define GetCurrentDir getcwd
+#endif
+
 #include <QMainWindow>
 #include <string>
 using namespace std;
@@ -29,6 +37,7 @@ public:
     void changeMMDepth();
     void delay(int millisecondsToWait);
     void toggleAnalyze();
+    string get_current_dir();
     ~MainWindow();
 
 private:
