@@ -28,4 +28,4 @@ qmake .. && make
 ```
 
 ## Status
-Currently **in development**.
+~~Currently **in development**.~~ Not working, i won't fix it because it's faster to write a new project. But i won't do that either.
